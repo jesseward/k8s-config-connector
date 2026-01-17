@@ -704,6 +704,17 @@ func (a *sqlInstanceAdapter) Update(ctx context.Context, updateOp *directbase.Up
 		updateOp.RecordUpdatingEvent()
 
 		{
+			// NOTE: klog is forced to v0 and unable to override, hence the other great V(2) logs in this controller are filtered.
+			//
+			// This will spit out _unfiltered_ instanceDiff: desired versus actual SQL instance object.
+			// Use the following query to view.
+			//
+			// resource.type="k8s_container"
+			// resource.labels.namespace_name="cnrm-system"
+			// resource.labels.pod_name="cnrm-controller-manager-0"
+			// resource.labels.container_name="manager"
+			// jsonPayload.msg="diff found"
+			log.V(0).Info("diff found", "instanceDiff", instanceDiff)
 			structuredreporting.ReportDiff(ctx, instanceDiff)
 		}
 
