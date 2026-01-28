@@ -151,6 +151,11 @@ generate:
 	make -C operator generate
 	make fmt
 
+# jesseward: build for b/469693633
+.PHONY: jesse
+jesse: docker-build-manager
+	docker push ${CONTROLLER_IMG}
+
 # Build the docker images
 .PHONY: docker-build
 docker-build: docker-build-manager docker-build-recorder docker-build-webhook docker-build-deletiondefender docker-build-unmanageddetector
